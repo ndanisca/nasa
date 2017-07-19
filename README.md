@@ -13,14 +13,14 @@ LINKS:
 
 INSTALLATION STEPS:
 ==========================
-Here my project installation steps which I followed, I'm using Linux distribution on PC:
-    -   Download and Create new Symfony project
-    -   Clone the project from remote repository: git clone https://github.com/ndanisca/nasa.git
-    -   Copy/Replace the cloned Nasa project to root directory of your newly created Symfony project
-    -   Update required dependencies by composer manager: composer update
-    -   Create and Configure virtual host for the project, enable the site conf (ex of my config file: nasa.conf in root directory of project repository)
-    -   Configure you .htaccess file, I've configured the dev environment for my project so all requests are forwarded to app_dev.php front controller
-    -   Configure parameters.yaml configuration file and connection to your db (My ex of MySql dump file is in root dir of Nasa project)
+    - Here my project installation steps which I followed, I'm using Linux distribution on PC:
+        -   Download and Create new Symfony project
+        -   Clone the project from remote repository: git clone https://github.com/ndanisca/nasa.git
+        -   Copy/Replace the cloned Nasa project to root directory of your newly created Symfony project
+        -   Update required dependencies by composer manager: composer update
+        -   Create and Configure virtual host for the project, enable the site conf (ex of my config file: nasa.conf in root directory of project repository)
+        -   Configure you .htaccess file, I've configured the dev environment for my project so all requests are forwarded to app_dev.php front controller
+        -   Configure parameters.yaml configuration file and connection to your db (My ex of MySql dump file is in root dir of Nasa project)
 
 
 PROJECT STRUCTURE:
