@@ -14,13 +14,13 @@ LINKS:
 INSTALLATION STEPS:
 ==========================
 Here my project installation steps which I followed, I'm using Linux distribution on PC:
-    - Download and Create new Symfony project
-    - Clone the project from remote repository: git clone https://github.com/ndanisca/nasa.git
-    - Copy/Replace the cloned Nasa project to root directory of your newly created Symfony project
-    - Update required dependencies by composer manager: composer update
-    - Create and Configure virtual host for the project, enable the site conf (ex of my config file: nasa.conf in root directory of project repository)
-    - Configure you .htaccess file, I've configured the dev environment for my project so all requests are forwarded to app_dev.php front controller
-    - Configure parameters.yaml configuration file and connection to your db (My ex of MySql dump file is in root dir of Nasa project)
+    -   Download and Create new Symfony project
+    -   Clone the project from remote repository: git clone https://github.com/ndanisca/nasa.git
+    -   Copy/Replace the cloned Nasa project to root directory of your newly created Symfony project
+    -   Update required dependencies by composer manager: composer update
+    -   Create and Configure virtual host for the project, enable the site conf (ex of my config file: nasa.conf in root directory of project repository)
+    -   Configure you .htaccess file, I've configured the dev environment for my project so all requests are forwarded to app_dev.php front controller
+    -   Configure parameters.yaml configuration file and connection to your db (My ex of MySql dump file is in root dir of Nasa project)
 
 
 PROJECT STRUCTURE:
@@ -60,8 +60,8 @@ PROJECT STRUCTURE:
 
 COMMENTS:
  ==========================
-    - I've tried to left descriptions in code and write PHPDoc blocks in classes, hope this could be an extra to README info
+    I've tried to left descriptions in code and write PHPDoc blocks in classes, hope this could be an extra to README info
 
  SCREENSHOTS:
  ==========================
-    - the screenshots with results of api requests and command execution you can find in root dir of Nasa project (screens.zip)
+    the screenshots with results of api requests and command execution you can find in root dir of Nasa project (screens.zip)
