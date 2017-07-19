@@ -59,8 +59,8 @@ class NeoController extends Controller
          * @var $neoRepository NeoRepository
          */
         //  get params
-        $isHazardousParam = $request->query->get('hazardous', false);
-        $isHazardous = $isHazardousParam && $isHazardousParam == 'true' ? true : false;
+        $param = $request->query->get('hazardous', false);
+        $isHazardous = $param && $param == 'true' ? true : false;
 
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -90,8 +90,8 @@ class NeoController extends Controller
          * @var $em EntityManager
          * @var $neoRepository NeoRepository
          */
-        $isHazardousParam = $request->query->get('hazardous', false);
-        $isHazardous = $isHazardousParam && $isHazardousParam == 'true' ? true : false;
+        $param = $request->query->get('hazardous', false);
+        $isHazardous = $param && $param == 'true' ? true : false;
 
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -99,7 +99,7 @@ class NeoController extends Controller
             $neoRepository = $em->getRepository('NasaBundle:Neo');
             $result = $neoRepository->getBestYear($isHazardous);
 
-            return new JsonResponse($result, 200, ['Content-Type' => 'application-json']);
+            return new JsonResponse(['year' => $result['year']], 200, ['Content-Type' => 'application-json']);
 
         } catch (\Exception $e){
             throw new \Exception($e->getMessage());
@@ -107,7 +107,7 @@ class NeoController extends Controller
     }
 
     /**
-     * @Route("best-month")
+     * @Route("/best-month", name="best-month")
      * @Method("GET")
      * @param Request $request
      * @return JsonResponse
@@ -128,7 +128,7 @@ class NeoController extends Controller
             $neoRepository = $em->getRepository('NasaBundle:Neo');
             $result = $neoRepository->getBestMonth($isHazardous);
 
-            return new JsonResponse($result, 200, ['Content-Type' => 'application-json']);
+            return new JsonResponse(['month' => $result['month']], 200, ['Content-Type' => 'application-json']);
 
         } catch (\Exception $e){
             throw new \Exception($e->getMessage());

@@ -3,6 +3,7 @@
 namespace NasaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use DoctrineExtensions\Query\Mysql\Date;
 
 /**
  * Neo
@@ -22,9 +23,9 @@ class Neo
     private $id;
 
     /**
-     * @var \DateTime
+     * @var Date
      *
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\Column(name="date", type="date")
      */
     private $date;
 

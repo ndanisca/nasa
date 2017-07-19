@@ -28,7 +28,7 @@ class CountNEOCommand extends Command
     // set command arguments
     protected function configure()
     {
-        $this->setName('neos:count')
+        $this->setName('count:neos')
               ->setDescription('Counts NEOs objects')
               ->addArgument('days', InputArgument::OPTIONAL, 'specify period in days');
     }

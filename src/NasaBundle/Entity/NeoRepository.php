@@ -3,7 +3,6 @@
 namespace NasaBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use NasaBundle\ApiBridge\ApiClient;
 
 /**
  * NeoRepository
@@ -19,14 +18,17 @@ class NeoRepository extends EntityRepository
      */
     public function getNeosObjects()
     {
+        //  create new instance of query builder
+        //  building a query
         $qb = $this->createQueryBuilder('neo')
-            ->where('neo.isHazardous = TRUE')
-            ->getQuery();
+            ->where('neo.isHazardous = TRUE');
 
         try {
-            return $qb->getArrayResult();
+            //  converting qb instaince to Query object, get result of query
+            return $qb->getQuery()->getArrayResult();
 
         } catch (\Exception $e) {
+            //  thrown exception If the getArrayResult() call fails
             throw new \Exception($e->getMessage());
         }
     }
@@ -39,11 +41,42 @@ class NeoRepository extends EntityRepository
     public function getFastestObject($isHazardous = false)
     {
         $qb = $this->createQueryBuilder('neo')
-                    ->select('neo.name')
+            ->select('neo.name')
+            ->where('neo.isHazardous = :isHazardous')
+            ->orderBy('neo.speed', 'DESC')
+            ->setParameter(':isHazardous', $isHazardous)
+            ->setMaxResults(1);
+        try {
+            return $qb->getQuery()->getSingleResult();
+
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    /**
+     * Get month with most count of NEOs
+     *
+     * @param bool $isHazardous
+     * @throws \Exception
+     * @return array
+     */
+    public function getBestYear($isHazardous = false)
+    {
+        //  cause function YEAR is not supported by Doctrine ->
+        //  need to update entityManager conf with new extension we have added to make thinks work
+        //  installed ext: "beberlei/DoctrineExtensions": "^1.0"
+        $emConfig = $this->getEntityManager()->getConfiguration();
+        $emConfig->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
+        $qb = $this->createQueryBuilder('neo')
+                    ->select('YEAR(neo.date) as year, COUNT(neo.date) as total')
                     ->where('neo.isHazardous = :isHazardous')
-                    ->orderBy('neo.speed', 'DESC')
+                    ->groupBy('year')
+                    ->orderBy('total', 'DESC')
                     ->setParameter(':isHazardous', $isHazardous)
-                    ->setMaxResults(1);
+                    ->setMaxResults(1)
+        ;
+
         try{
             return $qb->getQuery()->getSingleResult();
 
@@ -53,28 +86,40 @@ class NeoRepository extends EntityRepository
     }
 
     /**
-     * Have question related to this realization
+     * Get month with most count of NEOs
      *
      * @param bool $isHazardous
-     * @return array
-     */
-    public function getBestYear($isHazardous = false)
-    {
-        return [];
-    }
-
-    /**
-     * Have question related to this realization
-     *
-     * @param bool $isHazardous
+     * @throws \Exception
      * @return array
      */
     public function getBestMonth($isHazardous = false)
     {
-        return [];
+        //  cause function MONTH is not supported by Doctrine ->
+        //  need to update entityManager conf with new extension we have added to make thinks work
+        //  installed ext: "beberlei/DoctrineExtensions": "^1.0"
+        $emConfig = $this->getEntityManager()->getConfiguration();
+        $emConfig->addCustomDatetimeFunction('MONTH', 'DoctrineExtensions\Query\Mysql\Month');
+
+        $qb = $this->createQueryBuilder('neo')
+            ->select('MONTH(neo.date) as month, COUNT(neo.date) as total')
+            ->where('neo.isHazardous = :isHazardous')
+            ->groupBy('month')
+            ->orderBy('total', 'DESC')
+            ->setParameter(':isHazardous', $isHazardous)
+            ->setMaxResults(1)
+        ;
+
+        try{
+            return $qb->getQuery()->getSingleResult();
+
+        } catch(\Exception $e){
+            throw new \Exception($e->getMessage());
+        }
     }
 
     /**
+     * Get the total count of NEOs objects
+     *
      * @param $data
      * @return string
      */
@@ -105,26 +150,31 @@ class NeoRepository extends EntityRepository
                 //  init NEO object speeds var
                 $speed = current($info['close_approach_data'])['relative_velocity']['kilometers_per_hour'];
 
-                //  create new instance of Neo entity
+                //  create new instance of Neo class
                 $entity = new Neo();
-                //  init object with given data
+                //  initialize created object with data
                 $entity->setDate($date)
                         ->setReference($info['neo_reference_id'])
                         ->setName($info['name'])
                         ->setSpeed($speed)
                         ->setIsHazardous($info['is_potentially_hazardous_asteroid']);
 
-                //  persist created object
-                $this->_em->persist($entity);
+                //  managing the the entity object
+                //  tell to entity manager about objects which are need to be persisted in db
+                $this->getEntityManager()->persist($entity);
             }
         }
         try{
-            //  batch insertion in table
-            $this->_em->flush();
+            //
+            //   all of the objects that it's managing need to be persisted to the database
+            //  executing the insertion in db
+
+            $this->getEntityManager()->flush();
 
             return true;
 
         } catch(\Exception $e){
+            //  thrown exception If the flush() call fails
             throw new \Exception($e->getMessage());
         }
     }
